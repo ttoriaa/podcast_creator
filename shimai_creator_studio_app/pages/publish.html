@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Studio - Publish</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/studio.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy">
+          <strong>时髦小姨 Creator Studio</strong>
+          <span>Publish</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-link" data-page="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" data-page="brainstorm" href="brainstorm.html">Brainstorm</a>
+        <a class="nav-link" data-page="scripts" href="scripts.html">Scripts</a>
+        <a class="nav-link" data-page="publish" href="publish.html">Publish</a>
+        <a class="nav-link" href="../../index.html">Landing</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1 class="h1">发布工作流</h1>
+      <p>主题：<strong id="publishTopic">-</strong></p>
+      <p class="small" id="metaSummary" style="margin-top:6px;"></p>
+      <div id="channelList" class="badges"></div>
+      <div style="margin-top:12px;">
+        <div class="progress"><div class="progress-bar" id="publishProgress"></div></div>
+        <p id="publishProgressText" class="small" style="margin-top:6px;"></p>
+      </div>
+    </section>
+
+    <section class="section split">
+      <article class="card">
+        <h3>发布检查清单</h3>
+        <p>必填项全部完成后才允许执行发布。</p>
+        <div id="checklist" class="grid" style="margin-top:10px;"></div>
+        <div class="hero-actions" style="margin-top:12px;">
+          <button id="publishBtn" class="btn primary" type="button">执行发布</button>
+        </div>
+      </article>
+      <article class="card">
+        <h3>状态机</h3>
+        <p id="finalState" class="small"></p>
+        <div id="stateFlow" class="timeline-state" style="margin-top:8px;"></div>
+      </article>
+    </section>
+
+    <footer class="footer">Shimai Creator Studio · Publish</footer>
+  </div>
+
+  <script src="../assets/js/studio-data.js"></script>
+  <script src="../assets/js/studio-core.js"></script>
+  <script src="../assets/js/publish.js"></script>
+</body>
+</html>

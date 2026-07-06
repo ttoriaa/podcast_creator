@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>时髦小姨 Creator Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7f1e7;
+      --bg-2: #eef6ff;
+      --ink: #111827;
+      --muted: #5b6571;
+      --line: rgba(17, 24, 39, 0.12);
+      --card: rgba(255, 255, 255, 0.72);
+      --card-strong: rgba(255, 255, 255, 0.92);
+      --blue: #1d4ed8;
+      --cyan: #0ea5e9;
+      --coral: #f97316;
+      --violet: #8b5cf6;
+      --shadow: 0 22px 70px rgba(17, 24, 39, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(14, 165, 233, 0.18), transparent 26%),
+        radial-gradient(circle at 88% 14%, rgba(249, 115, 22, 0.16), transparent 24%),
+        radial-gradient(circle at 68% 88%, rgba(139, 92, 246, 0.14), transparent 26%),
+        linear-gradient(135deg, var(--bg) 0%, #fbfbfd 45%, var(--bg-2) 100%);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(17, 24, 39, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 24, 39, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black 48%, transparent 90%);
+      pointer-events: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    .shell {
+      width: min(1320px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0 64px;
+      position: relative;
+      z-index: 1;
+    }
+    .scroll-progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: rgba(17, 24, 39, 0.08);
+      z-index: 100;
+      pointer-events: none;
+    }
+    .scroll-progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--coral));
+      box-shadow: 0 0 16px rgba(29, 78, 216, 0.45);
+    }
+    .timeline {
+      position: fixed;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 60;
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.74);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 34px rgba(17, 24, 39, 0.12);
+      max-width: 184px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 16px;
+      bottom: 16px;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(29, 78, 216, 0.35), rgba(14, 165, 233, 0.25), rgba(249, 115, 22, 0.3));
+    }
+    .timeline a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 10px 6px 24px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64707c;
+      transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+    }
+    .timeline a::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid rgba(29, 78, 216, 0.3);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.06);
+    }
+    .timeline a.is-active {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.88);
+      transform: translateX(-2px);
+    }
+    .timeline a.is-active::before {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.12);
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.64);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.07);
+      animation: rise-in 0.7s ease both;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    }
+    .brand-mark::after {
+      content: "S";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .brand-copy strong,
+    .hero h1,
+    .section-head h2,
+    .module-card h3,
+    .page-card h3,
+    .stack-card h3 {
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+    }
+    .brand-copy strong { display: block; font-size: 16px; }
+    .brand-copy span { display: block; font-size: 12px; color: var(--muted); }
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill, .ghost, .primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    }
+    .pill { background: rgba(255, 255, 255, 0.72); color: var(--muted); }
+    .ghost { background: transparent; color: var(--ink); }
+    .primary { background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #fff; border-color: transparent; box-shadow: 0 16px 30px rgba(29, 78, 216, 0.18); }
+    .pill:hover, .ghost:hover, .primary:hover { transform: translateY(-1px); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 0.86fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .hero-main, .hero-side, .panel, .module-card, .page-card, .stack-card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+    }
+    .hero-main { padding: 28px; position: relative; overflow: hidden; }
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -30% auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(29, 78, 216, 0.22), rgba(14, 165, 233, 0.04) 62%, transparent 70%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .hero h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(38px, 5vw, 66px);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      max-width: 12ch;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+      max-width: 62ch;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+    .hero-metrics {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .metric {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(17, 24, 39, 0.07);
+    }
+    .metric strong { display: block; font-size: 24px; font-family: "Space Grotesk", sans-serif; }
+    .metric span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .hero-side { padding: 20px; display: grid; gap: 14px; }
+    .hero-side h3 { margin: 0; font-size: 18px; }
+    .checklist {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .checklist li {
+      padding: 14px 14px 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .checklist b {
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #fff;
+      font-size: 12px;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .checklist span { color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .section { margin-top: 18px; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .section-head h2 { margin: 0; font-size: 28px; letter-spacing: -0.03em; }
+    .section-head p { margin: 8px 0 0; color: var(--muted); max-width: 74ch; line-height: 1.7; }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .pipeline-card {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      position: relative;
+      overflow: hidden;
+    }
+    .pipeline-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -12% -30% auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(29, 78, 216, 0.18), rgba(14, 165, 233, 0.08));
+    }
+    .pipeline-card strong { display: block; font-size: 17px; margin-bottom: 8px; }
+    .pipeline-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .pipeline-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 999px; margin-bottom: 12px; background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #fff; font-weight: 800; font-family: "Space Grotesk", sans-serif; }
+
+    .grid-2 { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 14px; }
+    .panel { padding: 20px; }
+    .panel h3 { margin: 0 0 10px; font-size: 20px; }
+    .panel p { margin: 0 0 14px; color: var(--muted); line-height: 1.7; }
+    .module-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .module-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: none;
+    }
+    .module-card h3 { margin: 0 0 8px; font-size: 18px; }
+    .module-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      font-weight: 700;
+      color: #5f6b76;
+    }
+
+    .page-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .page-card { padding: 18px; }
+    .page-card h3 { margin: 0 0 8px; font-size: 18px; }
+    .page-card p { margin: 0; color: var(--muted); line-height: 1.7; font-size: 13px; }
+    .page-card ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .page-card li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .page-card li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      flex: none;
+    }
+
+    .stack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stack-card { padding: 18px; }
+    .stack-card h3 { margin: 0 0 12px; font-size: 18px; }
+    .stack-list { display: grid; gap: 10px; }
+    .stack-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      font-size: 13px;
+    }
+    .stack-item span { color: var(--muted); }
+
+    .directory {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.8);
+      font-family: "Space Grotesk", monospace;
+      color: #334155;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre;
+    }
+    .footer {
+      margin-top: 18px;
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1180px) {
+      .timeline { display: none; }
+      .hero, .grid-2, .stack-grid { grid-template-columns: 1fr; }
+      .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .page-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 18px, 1320px); padding-top: 12px; }
+      .topbar { border-radius: 28px; align-items: flex-start; flex-direction: column; }
+      .hero-main { padding: 22px; }
+      .hero h1 { max-width: none; }
+      .hero-metrics, .pipeline, .module-grid, .page-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress"><div class="scroll-progress-bar" id="progressBar"></div></div>
+
+  <nav class="timeline" aria-label="页面导航">
+    <a href="#hero" data-anchor="hero" class="is-active">Hero</a>
+    <a href="#pipeline" data-anchor="pipeline">Workflow</a>
+    <a href="#pages" data-anchor="pages">Pages</a>
+    <a href="#stack" data-anchor="stack">Stack</a>
+    <a href="#directory" data-anchor="directory">Directory</a>
+  </nav>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <strong>时髦小姨 Creator Studio</strong>
+          <span>选题 / 逐字稿 / 录制 / 剪辑 / 发布</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a class="pill" href="index.html">返回导航页</a>
+        <a class="ghost" href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">打开前台</a>
+        <a class="primary" href="#pages">查看页面骨架</a>
+      </div>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="hero-main">
+        <div class="eyebrow">Podcast ops cockpit · RSS + GLM</div>
+        <h1>把播客生产做成一套可运营的专业工作台</h1>
+        <p>
+          这个原型页不是单纯的官网补充，而是围绕时髦小姨主播运营的真实工作流搭建：从 RSS 音频流进来，到 GLM 语义分析、选题 Brainstorm、逐字稿写作、录制建议、剪辑建议，再到发布工作流和复盘闭环。
+        </p>
+        <div class="hero-actions">
+          <a class="primary" href="#pipeline">看工作流</a>
+          <a class="pill" href="#pages">看页面结构</a>
+          <a class="ghost" href="#directory">看目录蓝图</a>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric"><strong>5</strong><span>核心动作：选题、写稿、录制、剪辑、发布</span></div>
+          <div class="metric"><strong>1</strong><span>个内容中台：RSS + 语义分析 + 任务流</span></div>
+          <div class="metric"><strong>MVP</strong><span>先落地 Dashboard / Brainstorm / Scripts / Publish</span></div>
+          <div class="metric"><strong>GLM</strong><span>作为主分析模型，保留可回放与可追踪日志</span></div>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <h3>本页先验证什么</h3>
+        <ul class="checklist">
+          <li><b>1</b><span>运营能不能在首页直接看见“今天该做什么”。</span></li>
+          <li><b>2</b><span>选题建议能不能解释清楚“为什么是这个方向”。</span></li>
+          <li><b>3</b><span>逐字稿和录制/剪辑建议能不能直接交给协作人用。</span></li>
+          <li><b>4</b><span>发布工作流能不能形成状态机，而不是松散待办。</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="section" id="pipeline">
+      <div class="section-head">
+        <div>
+          <h2>内容生产流水线</h2>
+          <p>这条链路把播客从“内容”变成“可管理的生产系统”。每一步都应该输出结构化结果，而不是只给一段聊天式回答。</p>
+        </div>
+      </div>
+      <div class="pipeline">
+        <article class="pipeline-card">
+          <span class="pipeline-num">01</span>
+          <strong>RSS Sync</strong>
+          <p>接入现有播客音频流，拉取节目标题、简介、发布时间、音频链接与历史状态。</p>
+        </article>
+        <article class="pipeline-card">
+          <span class="pipeline-num">02</span>
+          <strong>GLM Analyze</strong>
+          <p>做语义分析、主题簇、情绪、人物、冲突点和可延展母题提取。</p>
+        </article>
+        <article class="pipeline-card">
+          <span class="pipeline-num">03</span>
+          <strong>Brainstorm</strong>
+          <p>把历史节目和趋势素材转成选题卡，显示评分、相似内容与风险提示。</p>
+        </article>
+        <article class="pipeline-card">
+          <span class="pipeline-num">04</span>
+          <strong>Script / Record / Edit</strong>
+          <p>逐字稿、录制建议、剪辑建议分三层输出，让协作人拿到可以直接执行的材料。</p>
+        </article>
+        <article class="pipeline-card">
+          <span class="pipeline-num">05</span>
+          <strong>Publish</strong>
+          <p>生成发布检查清单、渠道分发内容与复盘记录，形成稳定工作流闭环。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="pages">
+      <div class="section-head">
+        <div>
+          <h2>页面骨架</h2>
+          <p>原型先按页面切分，而不是按模型能力切分。这样产品、设计、前后端都能直接认领。</p>
+        </div>
+      </div>
+      <div class="page-grid">
+        <article class="page-card">
+          <h3>Dashboard 总览</h3>
+          <p>首页先回答三个问题：今天做什么、有什么风险、模型刚刚产出了什么。</p>
+          <ul>
+            <li>今日待办</li>
+            <li>最新节目与同步状态</li>
+            <li>模型摘要和风险提示</li>
+          </ul>
+        </article>
+        <article class="page-card">
+          <h3>选题 Brainstorm</h3>
+          <p>用主题卡、评分、相似节目和机会点，把“灵感”变成可讨论的候选集。</p>
+          <ul>
+            <li>选题推荐卡</li>
+            <li>受众标签与相似内容</li>
+            <li>风险点与可讲述性评分</li>
+          </ul>
+        </article>
+        <article class="page-card">
+          <h3>逐字稿工坊</h3>
+          <p>把选题直接转成可编辑文本，支持版本、批注、语气切换和段落重写。</p>
+          <ul>
+            <li>大纲 + 正文编辑区</li>
+            <li>版本对比与批注</li>
+            <li>金句和转场建议</li>
+          </ul>
+        </article>
+        <article class="page-card">
+          <h3>录制建议</h3>
+          <p>输出录制平台、设备、环境和节奏建议，避免创作和执行之间断层。</p>
+          <ul>
+            <li>录制平台选择</li>
+            <li>设备与环境清单</li>
+            <li>录制前 checklist</li>
+          </ul>
+        </article>
+        <article class="page-card">
+          <h3>剪辑建议</h3>
+          <p>把内容切点、章节点、标题和封面摘要整理成剪辑师能直接用的输出。</p>
+          <ul>
+            <li>时间轴建议</li>
+            <li>停顿与切点</li>
+            <li>标题 / 封面 / 摘要</li>
+          </ul>
+        </article>
+        <article class="page-card">
+          <h3>发布工作流</h3>
+          <p>把发布页做成状态机，而不是一个“发完就算了”的提交按钮。</p>
+          <ul>
+            <li>待确认 / 待录制 / 待剪辑</li>
+            <li>待审核 / 待发布 / 已发布</li>
+            <li>复盘记录与责任人</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="panel">
+          <h3>后台模块</h3>
+          <p>这个原型先把后台拆成 4 个最先验证价值的区域，避免一开始做成“菜单很多但没人用”的空壳。</p>
+          <div class="module-grid">
+            <article class="module-card">
+              <h3>内容资产库</h3>
+              <p>历史节目、主题簇、语义标签、标题和封面素材沉淀区。</p>
+              <div class="tag-row"><span class="tag">Archive</span><span class="tag">Tags</span><span class="tag">Reuse</span></div>
+            </article>
+            <article class="module-card">
+              <h3>系统设置</h3>
+              <p>RSS、GLM、权限、工作流规则和发布策略集中配置。</p>
+              <div class="tag-row"><span class="tag">Config</span><span class="tag">Access</span><span class="tag">Rules</span></div>
+            </article>
+            <article class="module-card">
+              <h3>模型运行</h3>
+              <p>保存每次调用的输入摘要、输出版本、耗时和错误信息。</p>
+              <div class="tag-row"><span class="tag">Trace</span><span class="tag">Logs</span><span class="tag">Replay</span></div>
+            </article>
+            <article class="module-card">
+              <h3>协作评论</h3>
+              <p>把“模型建议”变成可讨论、可修改、可确认的协作产物。</p>
+              <div class="tag-row"><span class="tag">Review</span><span class="tag">Edit</span><span class="tag">Approve</span></div>
+            </article>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>信息架构原则</h3>
+          <p>默认优先展示结论和可执行建议，再下钻到证据和原始分析。运营不应该先看到模型日志。</p>
+          <div class="stack-list">
+            <div class="stack-item"><strong>先总览</strong><span>Dashboard</span></div>
+            <div class="stack-item"><strong>再判断</strong><span>Brainstorm</span></div>
+            <div class="stack-item"><strong>再写作</strong><span>Scripts</span></div>
+            <div class="stack-item"><strong>再执行</strong><span>Recording / Editing</span></div>
+            <div class="stack-item"><strong>再发布</strong><span>Publish</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stack">
+      <div class="section-head">
+        <div>
+          <h2>推荐技术栈</h2>
+          <p>先用能快速迭代的组合把闭环跑起来，再在向量检索、主题聚类和自动化发布上逐步增强。</p>
+        </div>
+      </div>
+      <div class="stack-grid">
+        <article class="stack-card">
+          <h3>前端</h3>
+          <div class="stack-list">
+            <div class="stack-item"><strong>Next.js</strong><span>App Router / 页面路由都可扩展</span></div>
+            <div class="stack-item"><strong>TypeScript</strong><span>后台交互多，类型更稳</span></div>
+            <div class="stack-item"><strong>Tailwind / UI Kit</strong><span>快速搭出专业后台感</span></div>
+          </div>
+        </article>
+        <article class="stack-card">
+          <h3>后端 / 数据</h3>
+          <div class="stack-list">
+            <div class="stack-item"><strong>FastAPI</strong><span>承接 RSS、脚本和模型调用</span></div>
+            <div class="stack-item"><strong>PostgreSQL + pgvector</strong><span>节目、主题、草稿与语义检索</span></div>
+            <div class="stack-item"><strong>Redis + Worker</strong><span>异步同步与生成任务</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="directory">
+      <div class="section-head">
+        <div>
+          <h2>目录蓝图</h2>
+          <p>下面这份目录可以直接转成工程初始化结构。它对应的是“前台 + 后台 + 数据服务”三层。</p>
+        </div>
+      </div>
+      <div class="directory">shimai-creator-studio/
+  app/
+    (public)/
+      page.tsx
+      episodes/
+      episode/[id]/
+      about/
+    (studio)/
+      dashboard/
+      brainstorm/
+      scripts/
+      recording/
+      editing/
+      publish/
+      assets/
+      settings/
+  components/
+    studio/
+    public/
+    charts/
+    editor/
+  lib/
+    rss/
+    glm/
+    analytics/
+    workflow/
+  server/
+    api/
+    jobs/
+    models/
+  tests/
+    unit/
+    integration/</div>
+    </section>
+
+    <footer class="footer">
+      时髦小姨 Creator Studio prototype · RSS → GLM → Brainstorm → Script → Record → Edit → Publish
+    </footer>
+  </div>
+
+  <script>
+    const bar = document.getElementById('progressBar');
+    const anchors = Array.from(document.querySelectorAll('.timeline a[data-anchor]'));
+    const sections = anchors.map((anchor) => document.getElementById(anchor.dataset.anchor));
+
+    function updateProgress() {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+      bar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+    }
+
+    function updateActiveNav() {
+      const midpoint = window.innerHeight * 0.35;
+      let activeId = 'hero';
+      sections.forEach((section) => {
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= midpoint) activeId = section.id;
+      });
+      anchors.forEach((anchor) => {
+        anchor.classList.toggle('is-active', anchor.dataset.anchor === activeId);
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      updateProgress();
+      updateActiveNav();
+    }, { passive: true });
+    updateProgress();
+    updateActiveNav();
+  </script>
+</body>
+</html>

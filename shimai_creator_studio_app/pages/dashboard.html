@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Studio - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/studio.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy">
+          <strong>时髦小姨 Creator Studio</strong>
+          <span>Dashboard</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-link" data-page="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" data-page="brainstorm" href="brainstorm.html">Brainstorm</a>
+        <a class="nav-link" data-page="scripts" href="scripts.html">Scripts</a>
+        <a class="nav-link" data-page="publish" href="publish.html">Publish</a>
+        <a class="nav-link" href="../../index.html">Landing</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="badge">Today Ops</div>
+      <h1 class="h1">今天先做什么，一眼看清</h1>
+      <p>先总览任务、风险和同步状态，再进入选题和写作。这个页面是运营和主播每天的第一站。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="brainstorm.html">进入选题</a>
+        <a class="btn" href="scripts.html">进入逐字稿</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>关键指标</h2>
+          <p>数据可以先用本地 mock，后续替换为真实 API。</p>
+        </div>
+      </div>
+      <div id="metricsGrid" class="grid cols-4"></div>
+    </section>
+
+    <section class="section split">
+      <article class="card">
+        <div class="section-head">
+          <div>
+            <h2>今日任务</h2>
+            <p id="taskCounter" class="small"></p>
+          </div>
+          <select id="taskFilter" class="select" style="max-width: 140px;">
+            <option value="all">全部</option>
+            <option value="todo">未完成</option>
+            <option value="done">已完成</option>
+          </select>
+        </div>
+        <div id="taskList" class="grid"></div>
+      </article>
+
+      <article class="card">
+        <h3>风险提醒</h3>
+        <p>把“隐患”前置，避免发布当天才暴露问题。</p>
+        <ul id="riskList" class="list" style="margin-top:10px;"></ul>
+      </article>
+    </section>
+
+    <footer class="footer">Shimai Creator Studio · Dashboard</footer>
+  </div>
+
+  <script src="../assets/js/studio-data.js"></script>
+  <script src="../assets/js/studio-core.js"></script>
+  <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>

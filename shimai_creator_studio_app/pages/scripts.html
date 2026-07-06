@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Studio - Scripts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/studio.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy">
+          <strong>时髦小姨 Creator Studio</strong>
+          <span>Scripts</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-link" data-page="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" data-page="brainstorm" href="brainstorm.html">Brainstorm</a>
+        <a class="nav-link" data-page="scripts" href="scripts.html">Scripts</a>
+        <a class="nav-link" data-page="publish" href="publish.html">Publish</a>
+        <a class="nav-link" href="../../index.html">Landing</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1 class="h1">逐字稿工坊</h1>
+      <p>当前选题：<strong id="scriptTopic">-</strong></p>
+      <div id="scriptTags" class="badges"></div>
+      <div class="toolbar" style="margin-top:12px;">
+        <select id="toneSelect" class="select" style="max-width:200px;">
+          <option value="casual">更口语</option>
+          <option value="professional">更结构化</option>
+          <option value="warm">更温暖</option>
+        </select>
+        <button id="toneApplyBtn" class="btn" type="button">应用语气提示</button>
+        <button id="addBlockBtn" class="btn" type="button">新增段落</button>
+        <button id="snapshotBtn" class="btn" type="button">保存快照</button>
+        <button id="toPublishBtn" class="btn primary" type="button">进入发布</button>
+      </div>
+      <p id="saveStatus" class="small" style="margin-top:8px;"></p>
+    </section>
+
+    <section class="section split">
+      <article class="card">
+        <h3>编辑器</h3>
+        <textarea id="scriptEditor" class="textarea"></textarea>
+      </article>
+      <article class="card">
+        <h3>版本快照</h3>
+        <p>保存最近 8 个版本，方便回滚和对比。</p>
+        <ul id="versionList" class="list" style="margin-top:10px;"></ul>
+      </article>
+    </section>
+
+    <footer class="footer">Shimai Creator Studio · Scripts</footer>
+  </div>
+
+  <script src="../assets/js/studio-data.js"></script>
+  <script src="../assets/js/studio-core.js"></script>
+  <script src="../assets/js/scripts.js"></script>
+</body>
+</html>

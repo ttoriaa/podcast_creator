@@ -1,31 +1,20 @@
 (function () {
   const core = window.StudioCore;
   const data = window.StudioData;
+  const API_BASE = core.getApiBase();
 
   core.activeNav("scripts");
 
+  const pageState = core.loadState();
   const topicId = core.getSelectedTopic();
-  const topic = data.topics.find((t) => t.id === topicId) || data.topics[0];
+  const fallbackTopic = data.topics.find((t) => t.id === topicId) || data.topics[0];
+  const topic = pageState.selectedTopicPayload || fallbackTopic;
 
-  core.getById("scriptTopic").textContent = topic.title;
-  core.getById("scriptTags").innerHTML = "";
-  topic.tags.forEach((tag) => {
-    core.getById("scriptTags").appendChild(core.el("span", "badge", tag));
-  });
-
-  const textarea = core.getById("scriptEditor");
-  const status = core.getById("saveStatus");
-  const versions = core.getById("versionList");
-  const tone = core.getById("toneSelect");
-
-  const savedDraft = core.getScriptDraft();
-  if (savedDraft) {
-    textarea.value = savedDraft;
-  } else {
-    textarea.value = [
-      `# ${topic.title}`,
+  function buildFallbackDraft(currentTopic) {
+    return [
+      `# ${currentTopic.title}`,
       "",
-      ...topic.outline.map((line) => `- ${line}`),
+      ...(currentTopic.outline || []).map((line) => `- ${line}`),
       "",
       "开场正文：",
       "",
@@ -35,6 +24,25 @@
       "",
       "收尾正文："
     ].join("\n");
+  }
+
+  core.getById("scriptTopic").textContent = topic.title;
+  core.getById("scriptTags").innerHTML = "";
+  (topic.tags || []).forEach((tag) => {
+    core.getById("scriptTags").appendChild(core.el("span", "badge", tag));
+  });
+
+  const textarea = core.getById("scriptEditor");
+  const status = core.getById("saveStatus");
+  const modelStatus = core.getById("modelStatus");
+  const versions = core.getById("versionList");
+  const tone = core.getById("toneSelect");
+
+  const savedDraft = core.getScriptDraft();
+  if (savedDraft) {
+    textarea.value = savedDraft;
+  } else {
+    textarea.value = buildFallbackDraft(topic);
   }
 
   let timer = null;
@@ -65,6 +73,33 @@
     textarea.value += hint;
     saveDraft();
   });
+
+  async function generateDraft() {
+    const style = tone.value || "casual";
+    modelStatus.textContent = "正在生成逐字稿...";
+    try {
+      const resp = await fetch(`${API_BASE}/api/scripts/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic, style })
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const result = await resp.json();
+      const draft = (result && result.draft) || buildFallbackDraft(topic);
+      textarea.value = draft;
+      saveDraft();
+      modelStatus.textContent =
+        result.source === "glm"
+          ? "已生成模型初稿。"
+          : "模型不可用，已使用本地 fallback 模板。";
+    } catch (err) {
+      textarea.value = buildFallbackDraft(topic);
+      saveDraft();
+      modelStatus.textContent = "生成失败，已回退到本地模板。";
+    }
+  }
+
+  core.getById("generateDraftBtn").addEventListener("click", generateDraft);
 
   const state = core.loadState();
   const savedVersions = state.scriptVersions || [];

@@ -35,6 +35,36 @@
     return state.scriptDraft || "";
   }
 
+  function normalizeApiBase(raw) {
+    const value = (raw || "").trim();
+    if (!value) return "";
+    return value.replace(/\/+$/, "");
+  }
+
+  function getApiBase() {
+    const params = new URLSearchParams(window.location.search || "");
+    const fromQuery = normalizeApiBase(params.get("api_base") || "");
+    if (fromQuery) {
+      saveState({ apiBase: fromQuery });
+      return fromQuery;
+    }
+
+    const state = loadState();
+    const fromState = normalizeApiBase(state.apiBase || "");
+    if (fromState) return fromState;
+
+    const fromWindow = normalizeApiBase(window.STUDIO_API_BASE || "");
+    if (fromWindow) return fromWindow;
+
+    return "http://127.0.0.1:8000";
+  }
+
+  function setApiBase(baseUrl) {
+    const normalized = normalizeApiBase(baseUrl);
+    if (!normalized) return;
+    saveState({ apiBase: normalized });
+  }
+
   function getById(id) {
     return document.getElementById(id);
   }
@@ -64,6 +94,8 @@
     setSelectedTopic,
     setScriptDraft,
     getScriptDraft,
+    getApiBase,
+    setApiBase,
     getById,
     el,
     fmtPercent,

@@ -32,6 +32,12 @@
       <h1 class="h1">选题 Brainstorm</h1>
       <p>可筛选、可排序、可解释。选定一个主题后，一键进入逐字稿页面。</p>
       <div class="toolbar" style="margin-top:12px;">
+        <input id="rssUrlInput" class="input" style="max-width:420px;" placeholder="RSS URL（可选，留空使用后端默认）" />
+        <button id="rssSyncBtn" class="btn" type="button">同步 RSS</button>
+        <button id="generateTopicsBtn" class="btn primary" type="button">从 RSS + GLM 生成选题</button>
+      </div>
+      <p id="brainstormStatus" class="small" style="margin-top:8px;"></p>
+      <div class="toolbar" style="margin-top:12px;">
         <select id="tagFilter" class="select" style="max-width:220px;">
           <option value="">全部标签</option>
         </select>

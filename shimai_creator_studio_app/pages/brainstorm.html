@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Studio - Brainstorm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/studio.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-copy">
+          <strong>时髦小姨 Creator Studio</strong>
+          <span>Brainstorm</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-link" data-page="dashboard" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" data-page="brainstorm" href="brainstorm.html">Brainstorm</a>
+        <a class="nav-link" data-page="scripts" href="scripts.html">Scripts</a>
+        <a class="nav-link" data-page="publish" href="publish.html">Publish</a>
+        <a class="nav-link" href="../../index.html">Landing</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1 class="h1">选题 Brainstorm</h1>
+      <p>可筛选、可排序、可解释。选定一个主题后，一键进入逐字稿页面。</p>
+      <div class="toolbar" style="margin-top:12px;">
+        <input id="rssUrlInput" class="input" style="max-width:420px;" placeholder="RSS URL（可选，留空使用后端默认）" />
+        <button id="rssSyncBtn" class="btn" type="button">同步 RSS</button>
+        <button id="generateTopicsBtn" class="btn primary" type="button">从 RSS + GLM 生成选题</button>
+      </div>
+      <p id="brainstormStatus" class="small" style="margin-top:8px;"></p>
+      <div class="toolbar" style="margin-top:12px;">
+        <select id="tagFilter" class="select" style="max-width:220px;">
+          <option value="">全部标签</option>
+        </select>
+        <select id="sortBy" class="select" style="max-width:220px;">
+          <option value="resonance">按共鸣度排序</option>
+          <option value="novelty">按新颖度排序</option>
+          <option value="story">按可讲述性排序</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="section split">
+      <article class="card">
+        <h3>候选选题</h3>
+        <p>点击卡片查看右侧详情。</p>
+        <div id="topicList" class="grid" style="margin-top:10px;"></div>
+      </article>
+
+      <article class="card">
+        <h3 id="topicTitle">-</h3>
+        <p id="topicSummary"></p>
+        <div id="topicBadges" class="badges"></div>
+        <div class="kv" style="margin-top:10px;">
+          <div class="row"><b>受众</b><span id="topicAudience"></span></div>
+          <div class="row"><b>证据</b><span id="topicEvidence"></span></div>
+          <div class="row"><b>风险</b><span id="topicRisk"></span></div>
+        </div>
+        <h3 style="margin-top:12px;">建议提纲</h3>
+        <ul id="topicOutline" class="list"></ul>
+        <div class="hero-actions" style="margin-top:12px;">
+          <button class="btn primary" id="useTopicBtn" type="button">用这个选题写逐字稿</button>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">Shimai Creator Studio · Brainstorm</footer>
+  </div>
+
+  <script src="../assets/js/studio-data.js"></script>
+  <script src="../assets/js/studio-core.js"></script>
+  <script src="../assets/js/brainstorm.js"></script>
+</body>
+</html>
